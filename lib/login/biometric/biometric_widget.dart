@@ -749,12 +749,23 @@ class _BiometricWidgetState extends State<BiometricWidget>
                                     ),
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(12.0),
-                                      child: Image.memory(
-                                        _model.uploadedLocalFile1.bytes ??
-                                            Uint8List.fromList([]),
-                                        width: 170.0,
-                                        height: 36.0,
-                                        fit: BoxFit.fill,
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.45,
+                                        height: 50.0,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: FlutterFlowTheme.of(context).darkInput,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: BorderRadius.circular(12.0),
+                                        ),
+                                        child: Image.memory(
+                                          _model.uploadedLocalFile1.bytes ??
+                                              Uint8List.fromList([]),
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -833,12 +844,23 @@ class _BiometricWidgetState extends State<BiometricWidget>
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(12.0),
-                                        child: Image.memory(
-                                          _model.uploadedLocalFile2.bytes ??
-                                              Uint8List.fromList([]),
-                                          width: 170.0,
-                                          height: 36.0,
-                                          fit: BoxFit.cover,
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width * 0.45,
+                                          height: 50.0,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: FlutterFlowTheme.of(context).darkInput,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: BorderRadius.circular(12.0),
+                                          ),
+                                          child: Image.memory(
+                                            _model.uploadedLocalFile2.bytes ??
+                                                Uint8List.fromList([]),
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            fit: BoxFit.contain,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -1079,9 +1101,9 @@ class _BiometricWidgetState extends State<BiometricWidget>
                             text: 'Continue',
                             options: FFButtonOptions(
                               width: double.infinity,
-                              height: 40.0,
+                              height: 50.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 18.0, 16.0, 18.0),
+                                  16.0, 0.0, 16.0, 0.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
                               color: FlutterFlowTheme.of(context).primary,

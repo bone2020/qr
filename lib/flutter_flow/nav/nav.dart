@@ -10,6 +10,11 @@ import '/auth/base_auth_user_provider.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 import '/index.dart';
+import '/screens/wallet_screen.dart';
+import '/screens/payment_screen.dart';
+import '/screens/transaction_history_screen.dart';
+import '/screens/security_settings_screen.dart';
+import '/screens/subscription_screen.dart';
 
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
@@ -264,7 +269,32 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: PhoneNumberInputWidget.routeName,
           path: PhoneNumberInputWidget.routePath,
           builder: (context, params) => PhoneNumberInputWidget(),
-        )
+        ),
+        FFRoute(
+          name: 'WalletScreen',
+          path: '/wallet',
+          builder: (context, params) => const WalletScreen(),
+        ),
+        FFRoute(
+          name: 'PaymentScreen',
+          path: '/payment',
+          builder: (context, params) => const PaymentScreen(),
+        ),
+        FFRoute(
+          name: 'TransactionHistoryScreen',
+          path: '/transaction-history',
+          builder: (context, params) => const TransactionHistoryScreen(),
+        ),
+        FFRoute(
+          name: 'SecuritySettingsScreen',
+          path: '/security-settings',
+          builder: (context, params) => const SecuritySettingsScreen(),
+        ),
+        FFRoute(
+          name: 'SubscriptionScreen',
+          path: '/subscription',
+          builder: (context, params) => const SubscriptionScreen(),
+        ),
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

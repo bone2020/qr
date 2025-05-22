@@ -729,12 +729,23 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                     ),
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(12.0),
-                                      child: Image.memory(
-                                        _model.uploadedLocalFile2.bytes ??
-                                            Uint8List.fromList([]),
-                                        width: 170.0,
-                                        height: 36.0,
-                                        fit: BoxFit.fill,
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.45,
+                                        height: 50.0,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: FlutterFlowTheme.of(context).darkInput,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: BorderRadius.circular(12.0),
+                                        ),
+                                        child: Image.memory(
+                                          _model.uploadedLocalFile2.bytes ??
+                                              Uint8List.fromList([]),
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -813,12 +824,23 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(12.0),
-                                        child: Image.memory(
-                                          _model.uploadedLocalFile3.bytes ??
-                                              Uint8List.fromList([]),
-                                          width: 170.0,
-                                          height: 36.0,
-                                          fit: BoxFit.cover,
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width * 0.45,
+                                          height: 50.0,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: FlutterFlowTheme.of(context).darkInput,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: BorderRadius.circular(12.0),
+                                          ),
+                                          child: Image.memory(
+                                            _model.uploadedLocalFile3.bytes ??
+                                                Uint8List.fromList([]),
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            fit: BoxFit.contain,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -934,8 +956,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 7.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -943,33 +964,28 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                 data: ThemeData(
                                   checkboxTheme: CheckboxThemeData(
                                     visualDensity: VisualDensity.compact,
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(0.0),
                                     ),
                                   ),
-                                  unselectedWidgetColor:
-                                      FlutterFlowTheme.of(context).gray300,
+                                  unselectedWidgetColor: FlutterFlowTheme.of(context).gray300,
                                 ),
                                 child: Checkbox(
                                   value: _model.checkboxValue ??= true,
                                   onChanged: (newValue) async {
-                                    safeSetState(
-                                        () => _model.checkboxValue = newValue!);
+                                    safeSetState(() => _model.checkboxValue = newValue!);
                                   },
                                   side: BorderSide(
                                     width: 2,
                                     color: FlutterFlowTheme.of(context).gray300,
                                   ),
-                                  activeColor:
-                                      FlutterFlowTheme.of(context).primary,
+                                  activeColor: FlutterFlowTheme.of(context).primary,
                                   checkColor: FlutterFlowTheme.of(context).info,
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    6.0, 0.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(6.0, 0.0, 0.0, 0.0),
                                 child: RichText(
                                   textScaler: MediaQuery.of(context).textScaler,
                                   text: TextSpan(
@@ -1020,14 +1036,12 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                 !_model.formKey.currentState!.validate()) {
                               return;
                             }
-                            if ((_model.uploadedLocalFile2.bytes ?? [])
-                                    .isEmpty) {
+                            if ((_model.uploadedLocalFile2.bytes ?? []).isEmpty) {
                               FFAppState().isintro = false;
                               safeSetState(() {});
                               return;
                             }
-                            if ((_model.uploadedLocalFile3.bytes ?? [])
-                                    .isEmpty) {
+                            if ((_model.uploadedLocalFile3.bytes ?? []).isEmpty) {
                               FFAppState().islogin = false;
                               safeSetState(() {});
                               return;
@@ -1038,8 +1052,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                             }
                             GoRouter.of(context).prepareAuthEvent();
 
-                            final user =
-                                await authManager.createAccountWithEmail(
+                            final user = await authManager.createAccountWithEmail(
                               context,
                               _model.emailFieldTextController.text,
                               _model.passwordFieldTextController.text,
@@ -1052,79 +1065,29 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                 .doc(user.uid)
                                 .update(createBiometricDataRecordData(
                                   name: _model.fullNameFieldTextController.text,
-                                  userName:
-                                      _model.userNameFieldTextController.text,
-                                  phoneNumber:
-                                      _model.phoneNumberTextController.text,
+                                  userName: _model.userNameFieldTextController.text,
+                                  phoneNumber: _model.phoneNumberTextController.text,
                                   frontIDurl: _model.dropDownValue,
                                   backIDurl: _model.dropDownValue,
-                                  dateOfBirth: dateTimeFormat(
-                                      "MMMEd", _model.datePicked),
+                                  dateOfBirth: dateTimeFormat("MMMEd", _model.datePicked),
                                 ));
 
-                            {
-                              safeSetState(
-                                  () => _model.isDataUploading4 = true);
-                              var selectedUploadedFiles = <FFUploadedFile>[];
-                              var selectedMedia = <SelectedFile>[];
-                              var downloadUrls = <String>[];
-                              try {
-                                selectedUploadedFiles =
-                                    _model.uploadedLocalFile2.bytes!.isNotEmpty
-                                        ? [_model.uploadedLocalFile2]
-                                        : <FFUploadedFile>[];
-                                selectedMedia = selectedFilesFromUploadedFiles(
-                                  selectedUploadedFiles,
-                                );
-                                downloadUrls = (await Future.wait(
-                                  selectedMedia.map(
-                                    (m) async => await uploadData(
-                                        m.storagePath, m.bytes),
-                                  ),
-                                ))
-                                    .where((u) => u != null)
-                                    .map((u) => u!)
-                                    .toList();
-                              } finally {
-                                _model.isDataUploading4 = false;
-                              }
-                              if (selectedUploadedFiles.length ==
-                                      selectedMedia.length &&
-                                  downloadUrls.length == selectedMedia.length) {
-                                safeSetState(() {
-                                  _model.uploadedLocalFile4 =
-                                      selectedUploadedFiles.first;
-                                  _model.uploadedFileUrl4 = downloadUrls.first;
-                                });
-                              } else {
-                                safeSetState(() {});
-                                return;
-                              }
-                            }
-
-                            context.pushNamedAuth(
-                                EmailVerificationPageWidget.routeName,
-                                context.mounted);
+                            context.pushNamedAuth(EmailVerificationPageWidget.routeName, context.mounted);
                           },
                           text: 'Sign up',
                           options: FFButtonOptions(
                             width: double.infinity,
-                            height: 40.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                16.0, 18.0, 16.0, 18.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
+                            height: 50.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                             color: FlutterFlowTheme.of(context).primary,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  fontFamily: 'SF UI Font',
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  fontSize: 18.0,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                              fontFamily: 'SF UI Font',
+                              color: FlutterFlowTheme.of(context).primaryBackground,
+                              fontSize: 18.0,
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.w600,
+                            ),
                             elevation: 0.0,
                             borderSide: BorderSide(
                               color: Colors.transparent,
@@ -1153,124 +1116,79 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 16.0),
-                                  child: FFButtonWidget(
-                                    onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
-                                      final user = await authManager
-                                          .signInWithGoogle(context);
-                                      if (user == null) {
-                                        return;
-                                      }
-
-                                      context.pushNamedAuth(
-                                          BiometricWidget.routeName,
-                                          context.mounted);
-                                    },
-                                    text: '',
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.google,
-                                      color:
-                                          FlutterFlowTheme.of(context).tertiary,
-                                      size: 30.0,
-                                    ),
-                                    options: FFButtonOptions(
-                                      width: 70.0,
-                                      height: 44.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          16.0, 0.0, 16.0, 0.0),
-                                      iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            fontFamily: 'SF UI Font',
-                                            color: Colors.white,
-                                            letterSpacing: 0.0,
-                                          ),
-                                      elevation: 0.0,
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .darkInput,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                  ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  GoRouter.of(context).prepareAuthEvent();
+                                  final user = await authManager.signInWithGoogle(context);
+                                  if (user == null) {
+                                    return;
+                                  }
+                                  context.pushNamedAuth(BiometricWidget.routeName, context.mounted);
+                                },
+                                text: '',
+                                icon: FaIcon(
+                                  FontAwesomeIcons.google,
+                                  color: FlutterFlowTheme.of(context).tertiary,
+                                  size: 50.0,
                                 ),
-                              ],
+                                options: FFButtonOptions(
+                                  width: 80.0,
+                                  height: 80.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primaryBackground,
+                                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'SF UI Font',
+                                    color: Colors.white,
+                                    letterSpacing: 0.0,
+                                  ),
+                                  elevation: 0.0,
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).darkInput,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                              ),
                             ),
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                isAndroid
-                                    ? Container()
-                                    : Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 0.0, 16.0),
-                                        child: FFButtonWidget(
-                                          onPressed: () async {
-                                            GoRouter.of(context)
-                                                .prepareAuthEvent();
-                                            final user = await authManager
-                                                .signInWithApple(context);
-                                            if (user == null) {
-                                              return;
-                                            }
-
-                                            context.pushNamedAuth(
-                                                BiometricWidget.routeName,
-                                                context.mounted);
-                                          },
-                                          text: '\n',
-                                          icon: Icon(
-                                            Icons.apple,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondary,
-                                            size: 40.0,
-                                          ),
-                                          options: FFButtonOptions(
-                                            width: 70.0,
-                                            height: 44.0,
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    16.0, 0.0, 16.0, 0.0),
-                                            iconPadding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                            textStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .override(
-                                                      fontFamily: 'SF UI Font',
-                                                      color: Colors.white,
-                                                      letterSpacing: 0.0,
-                                                    ),
-                                            elevation: 0.0,
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .darkInput,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                        ),
-                                      ),
-                              ],
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  GoRouter.of(context).prepareAuthEvent();
+                                  final user = await authManager.signInWithApple(context);
+                                  if (user == null) {
+                                    return;
+                                  }
+                                  context.pushNamedAuth(BiometricWidget.routeName, context.mounted);
+                                },
+                                text: '',
+                                icon: Icon(
+                                  Icons.apple,
+                                  color: FlutterFlowTheme.of(context).secondary,
+                                  size: 50.0,
+                                ),
+                                options: FFButtonOptions(
+                                  width: 80.0,
+                                  height: 80.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primaryBackground,
+                                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'SF UI Font',
+                                    color: Colors.white,
+                                    letterSpacing: 0.0,
+                                  ),
+                                  elevation: 0.0,
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).darkInput,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -1280,7 +1198,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 24.0),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
                 child: InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
@@ -1295,15 +1213,13 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                       children: [
                         TextSpan(
                           text: 'Already have an account? ',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: 'SF UI Font',
-                                color: FlutterFlowTheme.of(context).tertiary,
-                                fontSize: 17.0,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.normal,
-                              ),
+                          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'SF UI Font',
+                            color: FlutterFlowTheme.of(context).tertiary,
+                            fontSize: 17.0,
+                            letterSpacing: 0.0,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                         TextSpan(
                           text: 'Log in',
@@ -1316,11 +1232,11 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                         )
                       ],
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'SF UI Font',
-                            fontSize: 17.0,
-                            letterSpacing: 0.0,
-                            lineHeight: 1.2,
-                          ),
+                        fontFamily: 'SF UI Font',
+                        fontSize: 17.0,
+                        letterSpacing: 0.0,
+                        lineHeight: 1.2,
+                      ),
                     ),
                   ),
                 ),

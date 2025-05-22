@@ -1,10 +1,7 @@
-import '/appbar/single_appbar/single_appbar_widget.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
 import 'package:flutter/material.dart';
-import 'scanqrcode_page_model.dart';
-export 'scanqrcode_page_model.dart';
+import '../screens/generate_qr_screen.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'dart:convert';
 
 class ScanqrcodePageWidget extends StatefulWidget {
   const ScanqrcodePageWidget({super.key});
@@ -16,24 +13,44 @@ class ScanqrcodePageWidget extends StatefulWidget {
   State<ScanqrcodePageWidget> createState() => _ScanqrcodePageWidgetState();
 }
 
-class _ScanqrcodePageWidgetState extends State<ScanqrcodePageWidget> {
-  late ScanqrcodePageModel _model;
+class _ScanqrcodePageWidgetState extends State<ScanqrcodePageWidget> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? controller;
+  bool isScanning = true;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ScanqrcodePageModel());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        isScanning = _tabController.index == 0;
+      });
+    });
   }
 
   @override
   void dispose() {
-    _model.dispose();
-
+    _tabController.dispose();
+    controller?.dispose();
     super.dispose();
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      if (scanData.code != null) {
+        try {
+          final data = jsonDecode(scanData.code!);
+          _handleQRCodeData(data);
+        } catch (e) {
+          _showError('Invalid QR code format');
+        }
+      }
+    });
   }
 
   @override
@@ -45,89 +62,112 @@ class _ScanqrcodePageWidgetState extends State<ScanqrcodePageWidget> {
       },
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              wrapWithModel(
-                model: _model.singleAppbarModel,
-                updateCallback: () => safeSetState(() {}),
-                child: SingleAppbarWidget(
-                  title: 'Scan qr code',
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 24.0),
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () async {
-                    context.pushNamed(EnterUpiPageWidget.routeName);
-                  },
-                  child: RichText(
-                    textScaler: MediaQuery.of(context).textScaler,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Pay using ',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: 'SF UI Font',
-                                color: FlutterFlowTheme.of(context).tertiary,
-                                fontSize: 15.0,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.bold,
-                                lineHeight: 1.5,
-                              ),
-                        ),
-                        TextSpan(
-                          text: 'UPI ID ',
-                          style: TextStyle(
-                            color: FlutterFlowTheme.of(context).primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                            height: 1.5,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'or ',
-                          style: TextStyle(
-                            color: FlutterFlowTheme.of(context).tertiary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                            height: 1.5,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Phone Number ',
-                          style: TextStyle(
-                            color: FlutterFlowTheme.of(context).primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                            height: 1.5,
-                          ),
-                        )
-                      ],
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'SF UI Font',
-                            fontSize: 15.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.bold,
-                            lineHeight: 1.5,
-                          ),
-                    ),
-                  ),
-                ),
-              ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          title: const Text('QR Code'),
+          backgroundColor: Theme.of(context).primaryColor,
+          foregroundColor: Colors.white,
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Scan QR'),
+              Tab(text: 'Generate QR'),
             ],
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            indicatorColor: Colors.white,
           ),
         ),
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            // Scan QR Tab
+            Stack(
+              children: [
+                QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                  overlay: QrScannerOverlayShape(
+                    borderColor: Theme.of(context).primaryColor,
+                    borderRadius: 10,
+                    borderLength: 30,
+                    borderWidth: 10,
+                    cutOutSize: MediaQuery.of(context).size.width * 0.8,
+                  ),
+                ),
+                Positioned(
+                  bottom: 24,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          isScanning ? Icons.flash_off : Icons.flash_on,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          await controller?.toggleFlash();
+                          setState(() {
+                            isScanning = !isScanning;
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.flip_camera_ios,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          await controller?.flipCamera();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            // Generate QR Tab
+            const GenerateQRScreen(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handleQRCodeData(Map<String, dynamic> data) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('QR Code Detected'),
+        content: Text('Amount: GHS ${data['amount']}\nDescription: ${data['description']}'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(
+                context,
+                '/payment',
+                arguments: data,
+              );
+            },
+            child: const Text('Proceed'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
       ),
     );
   }

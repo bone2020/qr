@@ -9,6 +9,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'home_widget_model.dart';
+import '/providers/wallet_provider.dart';
+import '/screens/payment_screen.dart';
 export 'home_widget_model.dart';
 
 class HomeWidgetWidget extends StatefulWidget {
@@ -158,6 +160,20 @@ class _HomeWidgetWidgetState extends State<HomeWidgetWidget>
                 ),
               ].divide(SizedBox(width: 12.0)),
             ).animateOnPageLoad(animationsMap['rowOnPageLoadAnimation']!),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                context.pushNamed('PaymentScreen');
+              },
+              icon: const Icon(Icons.payment),
+              label: const Text('Make Payment'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: FlutterFlowTheme.of(context).primary,
+                foregroundColor: Colors.white,
+              ),
+            ),
           ),
           Expanded(
             child: ListView(
